@@ -1,43 +1,46 @@
 <div class="container">
     <table class="notes-table">
-        <tr>
-            <th class="notes-header-icon"></th>
-            <th>Name</th>
-            <th>Created</th>
-            <th>Category</th>
-            <th>Content</th>
-            <th>Dates</th>
-            <th class="notes-header-icon"></th>
-            <th class="notes-header-icon"><span class="material-symbols-outlined archive">archive</span></th>
-            <th class="notes-header-icon"><span class="material-symbols-outlined">delete</span></th>
-        </tr>
-        <tr>
-            <td><span class="material-symbols-outlined category">shopping_cart</span></td>
-            <td>Shopping list</td>
-            <td>April 20, 2021</td>
-            <td>Task</td>
-            <td>Tomato, bread</td>
-            <td></td>
-            <td><span class="material-symbols-outlined edit">edit</span></td>
-            <td><span class="material-symbols-outlined archive">archive</span></td>
-            <td><span class="material-symbols-outlined delete">delete</span></td>                
-        </tr>
+        <thead>
+            <tr>
+                <th class="notes-header-icon"></th>
+                <th>Name</th>
+                <th>Created</th>
+                <th>Category</th>
+                <th>Content</th>
+                <th>Dates</th>
+                <th class="notes-header-icon"></th>
+                <th class="notes-header-icon"><span class="material-symbols-outlined">archive</span></th>
+                <th class="notes-header-icon"><span class="material-symbols-outlined">delete</span></th>
+            </tr>
+        </thead>            
+        <tbody class="notes-body">
+        </tbody>
     </table>
     <div class="button-wrapper">
-        <button>Create note</button>
+        <button class="create-notes-button">Create note</button>
+    </div>
+    <div class="button-wrapper">
+      <label for="showArchive">
+        <select name="showArchive" id="show-archive">
+            <option value="active" selected>Active</option>
+            <option value="archived">Archived</option>
+        </select>
+      </label>
     </div>
     <table class="notes-table summary">
-        <tr>
-            <th class="notes-header-icon"></th>
-            <th>Note Category</th>
-            <th>Active</th>
-            <th>Archived</th>
-        </tr>
-        <tr>
-            <td><span class="material-symbols-outlined category">shopping_cart</span></td>
-            <td>Task</td>
-            <td>13</td>
-            <td>4</td>
-        </tr>
+        <tbody class="summary-notes-body">
+            <tr>
+                <th class="notes-header-icon"></th>
+                <th>Note Category</th>
+                <th>Active</th>
+                <th>Archived</th>
+            </tr>
+            <tr>
+                <td><span class="material-symbols-outlined category">shopping_cart</span></td>
+                <td>Task</td>
+                <td>13</td>
+                <td>4</td>
+            </tr>
+        </tbody>
     </table>
 </div>

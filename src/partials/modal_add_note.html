@@ -1,26 +1,28 @@
 <div class="backdrop-note is-hidden">
-    <div class="modal-note">
-      <button class="button-close" data-modal-close>
-          <span class="material-symbols-outlined">close</span>
-      </button>
-      <div class="note-form">
+  <div class="modal-note">
+    <button class="button-close">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="note-form">
+      <form class="create-note-form" >
         <fieldset>
-            <legend>Create new note</legend>
-            <label class="note-form-label" for="note-name">Name<input name="note-name" type="text"></label>
-            <label class="note-form-label" for="note-date">Date<input name="note-date" type="date"></label>
-            
-            <label class="note-form-label" for="note-category">Category
-                <select name="note-category" id="note-category">
-                    <option value="Task" selected>Task</option>
-                    <option value="Random Thought">Random Thought</option>
-                    <option value="Idea">Idea</option>
-                    <option value="Quote" disabled>Quote</option>   
-                </select>
-            </label>
-            
-            <label class="note-form-label" for="note-content">Content<input name="note-content" type="text"></label>
-            
+          <legend>Create new note</legend>
+          <label class="note-form-label" for="note-name">Name<input id="note-name" name="note-name" type="text"></label>
+          <label class="note-form-label" for="note-date">Date<input id="note-date" name="note-date" type="date"></label>
+          
+          <label class="note-form-label" for="note-category">Category
+              <select name="note-category" id="note-category">
+                  <option value="Task" selected>Task</option>
+                  <option value="Random Thought">Random Thought</option>
+                  <option value="Idea">Idea</option>
+                  <option value="Quote" disabled>Quote</option>   
+              </select>
+          </label>
+          <label class="note-form-label" for="note-content">Content<input id="note-content" name="note-content" type="text"></label>
+          <button type="submit" class="button-add-note">Create</button>
+          <button type="submit" class="button-edit-note is-hidden">Edit</button>
         </fieldset>
-      </div>
+      </form>
     </div>
   </div>
+</div>

@@ -3,21 +3,6 @@
     display: none;
 }
 
-.modal-note {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    padding: 20px 30px 20px 30px;
-
-    background-color: #fff;
-    width: 450px;
-    height: 300px;
-    border-radius: 4px;
-    // padding: 40px 16px 40px 14px;
-    
-}
-
 .backdrop-note {
     position: fixed;
     top: 0;
@@ -35,6 +20,21 @@
       pointer-events: none;
       visibility: hidden;
     }
+}
+
+.modal-note {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    padding: 20px 30px 20px 30px;
+
+    background-color: #fff;
+    width: 450px;
+    height: fit-content;
+    border-radius: 4px;
+    // padding: 40px 16px 40px 14px;
+    
 }
   
 body.modal-open {
