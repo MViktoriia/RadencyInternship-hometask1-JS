@@ -213,7 +213,7 @@ function Notepad(notes) {
   }
 
   function deleteNote(id, notes, archivedNote, categories) {
-    noteToDeliteIndex = notes.findIndex(note => note.id === id);
+    const noteToDeliteIndex = notes.findIndex(note => note.id === id);
     notes.splice(noteToDeliteIndex, 1);
     renderNotesList(notes, categories);
     renderSummaryNotesInfo(notes, archivedNote, categories);
@@ -260,18 +260,20 @@ function Notepad(notes) {
   }
 
   function addToArchive(id, notes, archivedNote, categories) {
-    noteToArchivate = notes.find(note => note.id === id);
+    const noteToArchivate = notes.find(note => note.id === id);
     archivedNote.push(noteToArchivate);
-    noteToArchivateIndex = notes.findIndex(note => note.id === id);
+    const noteToArchivateIndex = notes.findIndex(note => note.id === id);
     notes.splice(noteToArchivateIndex, 1);
     renderNotesList(notes, categories);
     renderSummaryNotesInfo(notes, archivedNote, categories);
   }
 
   function removeFromArchive(id, notes, archivedNote, categories) {
-    noteToUnarchivate = archivedNote.find(note => note.id === id);
+    const noteToUnarchivate = archivedNote.find(note => note.id === id);
     notes.push(noteToUnarchivate);
-    noteToUnarchivateIndex = archivedNote.findIndex(note => note.id === id);
+    const noteToUnarchivateIndex = archivedNote.findIndex(
+      note => note.id === id
+    );
     archivedNote.splice(noteToUnarchivateIndex, 1);
     renderNotesList(archivedNote, categories);
     renderSummaryNotesInfo(notes, archivedNote, categories);
