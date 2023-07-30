@@ -1,12 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes App</title>
-</head>
-<body>
-    <h1>This is my notes</h1>
-    
-</body>
-</html>
+<div class="container">
+    <table class="notes-table">
+        <thead>
+            <tr>
+                <th class="notes-header-icon"></th>
+                <th>Name</th>
+                <th>Created</th>
+                <th>Category</th>
+                <th>Content</th>
+                <th>Dates</th>
+                <th class="notes-header-icon"></th>
+                <th class="notes-header-icon"><span class="material-symbols-outlined">archive</span></th>
+                <th class="notes-header-icon"><span class="material-symbols-outlined">delete</span></th>
+            </tr>
+        </thead>            
+        <tbody class="notes-body">
+        </tbody>
+    </table>
+    <div class="button-wrapper">
+        <button class="create-notes-button">Create note</button>
+    </div>
+    <div class="button-wrapper">
+      <label for="showArchive">
+        <select name="showArchive" id="show-archive">
+            <option value="active" selected>Active</option>
+            <option value="archived">Archived</option>
+        </select>
+      </label>
+    </div>
+    <table class="notes-table summary">
+       <thead>
+        <tr>
+            <th class="notes-header-icon"></th>
+            <th>Note Category</th>
+            <th>Active</th>
+            <th>Archived</th>
+        </tr>
+       </thead>
+        <tbody class="summary-notes-body">
+        </tbody>
+    </table>
+</div>
