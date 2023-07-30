@@ -1,6 +1,8 @@
 import { nanoid } from 'nanoid';
-import { notes } from './notes_db';
+import initialNotesValues from './notes_db';
 import { noteCategoriesIcons } from './notesCategoriesInfo';
+import { formatDate } from './formatDate';
+import { dateParse } from './dateParse';
 
 // Selectors
 const refs = {
@@ -16,22 +18,26 @@ const refs = {
   noteContentInput: document.querySelector('#note-content'),
   noteCategorySelect: document.querySelector('#note-category'),
   showArchiveSelect: document.querySelector('#show-archive'),
+  summaryNotesTableBodyEl: document.querySelector('.summary-notes-body'),
 };
 
+const notesList = [...initialNotesValues];
+const archivedNote = [];
 let changedNote = {};
-let archivedNote = [];
-console.log(changedNote);
 
 // Event listeners
-document.addEventListener('DOMContentLoaded', () => renderNotesList(notes));
+document.addEventListener('DOMContentLoaded', () => renderNotesList(notesList));
+document.addEventListener('DOMContentLoaded', () =>
+  renderSummaryNotesInfo(notesList, archivedNote, noteCategoriesIcons)
+);
 refs.createNoteBtn.addEventListener('click', showModal);
 refs.closeModalBtn.addEventListener('click', closeModal);
 refs.submitFormBtn.addEventListener('click', addNote);
 refs.submitFormBtnEdit.addEventListener('click', changeNote);
 refs.showArchiveSelect.addEventListener('change', onShowArchiveSelectChange);
 
-function renderOneNote(note) {
-  const categoryForRender = noteCategoriesIcons.find(
+function renderOneNote(note, categories) {
+  const categoryForRender = categories.find(
     item => item.category === note.category
   );
   const noteTableRowEl = document.createElement('tr');
@@ -61,7 +67,7 @@ function renderOneNote(note) {
   noteTableRowEl.appendChild(noteContentTableDataEl);
 
   const noteDatesTableDataEl = document.createElement('td');
-  noteDatesTableDataEl.innerText = note.dates;
+  noteDatesTableDataEl.innerText = dateParse(note.content);
   noteDatesTableDataEl.classList.add('table-data-note-dates');
   noteTableRowEl.appendChild(noteDatesTableDataEl);
 
@@ -70,7 +76,9 @@ function renderOneNote(note) {
   noteTableRowEl.appendChild(noteEditTableDataEl);
 
   const noteArchiveTableDataEl = document.createElement('td');
-  noteArchiveTableDataEl.innerHTML = `<span class="material-symbols-outlined archive">archive</span>`;
+  noteArchiveTableDataEl.innerHTML = `<span class="material-symbols-outlined archive">archive</span>
+  <span class="material-symbols-outlined unarchive is-hidden">unarchive</span>`;
+
   noteTableRowEl.appendChild(noteArchiveTableDataEl);
 
   const noteDeleteTableDataEl = document.createElement('td');
@@ -82,13 +90,12 @@ function renderOneNote(note) {
 
 function renderNotesList(notesArr) {
   refs.notesTableBody.innerHTML = '';
-  // рендер notes з масиву
-  console.log(notesArr);
+  //  render notes
   notesArr.map(note => {
-    renderOneNote(note);
+    renderOneNote(note, noteCategoriesIcons);
   });
 
-  // видалення нотатки
+  // note remove
   const deleteElList = document.querySelectorAll('.delete');
   deleteElList.forEach(deleteEl => {
     deleteEl.addEventListener('click', () =>
@@ -96,18 +103,48 @@ function renderNotesList(notesArr) {
     );
   });
 
-  // редагування нотатки
+  // note edit
   const editElList = document.querySelectorAll('.edit');
   editElList.forEach(editEl => {
     editEl.addEventListener('click', () => prefillFormWithNoteData(editEl));
   });
 
-  // архівація нотаток
+  // note archivate
   const archiveElList = document.querySelectorAll('.archive');
+  const unarchiveElList = document.querySelectorAll('.unarchive');
   archiveElList.forEach(archiveEl => {
-    archiveEl.addEventListener('click', () =>
-      addToArchive(archiveEl.parentElement.parentElement.id)
+    archiveEl.addEventListener('click', e =>
+      addToArchive(archiveEl.parentElement.parentElement.id, e)
     );
+  });
+  unarchiveElList.forEach(unarchiveEl => {
+    unarchiveEl.addEventListener('click', e =>
+      removeFromArchive(unarchiveEl.parentElement.parentElement.id, e)
+    );
+  });
+}
+
+function renderSummaryNotesInfo(notes, archive, categories) {
+  refs.summaryNotesTableBodyEl.innerHTML = '';
+  categories.map(category => {
+    const noteTableRowEl = document.createElement('tr');
+    const noteIconTableDatadEl = document.createElement('td');
+    noteIconTableDatadEl.innerHTML = `<span class="material-symbols-outlined category">${category.icon}</span>`;
+    noteTableRowEl.appendChild(noteIconTableDatadEl);
+    const noteCategoryNameTableDatadEl = document.createElement('td');
+    noteCategoryNameTableDatadEl.innerText = `${category.category}`;
+    noteTableRowEl.appendChild(noteCategoryNameTableDatadEl);
+    const amountActiveNotesPerCategoryEl = document.createElement('td');
+    amountActiveNotesPerCategoryEl.innerText = `${
+      notes.filter(note => note.category === category.category).length
+    }`;
+    noteTableRowEl.appendChild(amountActiveNotesPerCategoryEl);
+    const amountArchivedNotesPerCategoryEl = document.createElement('td');
+    amountArchivedNotesPerCategoryEl.innerText = `${
+      archive.filter(note => note.category === category.category).length
+    }`;
+    noteTableRowEl.appendChild(amountArchivedNotesPerCategoryEl);
+    refs.summaryNotesTableBodyEl.appendChild(noteTableRowEl);
   });
 }
 
@@ -124,25 +161,26 @@ function addNote(event) {
     created: formData.get('note-date'),
     category: formData.get('note-category'),
     content: formData.get('note-content'),
-    dates: '',
     archived: false,
   };
 
-  notes.push(newNote);
-  renderNotesList(notes);
+  notesList.push(newNote);
+  renderNotesList(notesList);
+  renderSummaryNotesInfo(notesList, archivedNote, noteCategoriesIcons);
   closeModal();
 }
 
 function deleteNote(id) {
-  noteToDeliteIndex = notes.findIndex(note => note.id === id);
-  notes.splice(noteToDeliteIndex, 1);
-  renderNotesList(notes);
+  noteToDeliteIndex = notesList.findIndex(note => note.id === id);
+  notesList.splice(noteToDeliteIndex, 1);
+  renderNotesList(notesList);
+  renderSummaryNotesInfo(notesList, archivedNote, noteCategoriesIcons);
 }
 
 function changeNote(event) {
   event.preventDefault();
 
-  editdNoteIndex = notes.indexOf(
+  editdNoteIndex = notesList.indexOf(
     notes.find(note => note.id === changedNote.id)
   );
 
@@ -150,13 +188,12 @@ function changeNote(event) {
   changedNote.created = refs.noteDateInput.value;
   changedNote.category = refs.noteCategorySelect.value;
   changedNote.content = refs.noteContentInput.value;
-  changedNote.dates = '';
+  changedNote.dates = dateParse(refs.noteContentInput.value);
   changedNote.archived = false;
 
-  console.log(changedNote);
-
-  notes.splice(editdNoteIndex, 1, changedNote);
-  renderNotesList(notes);
+  notesList.splice(editdNoteIndex, 1, changedNote);
+  renderNotesList(notesList);
+  renderSummaryNotesInfo(notesList, archivedNote, noteCategoriesIcons);
   changedNote = {};
   closeModal();
 }
@@ -167,10 +204,11 @@ function prefillFormWithNoteData(elem) {
   refs.submitFormBtnEdit.classList.remove('is-hidden');
   id = elem.parentElement.parentElement.id;
   changedNote.id = id;
-  // editedTdValues = elem.parentElement.parentElement.children;
   refs.noteNameInput.value =
     elem.parentElement.parentElement.children[1].innerText;
-  //   refs.noteDateInput.value = Date.parse(editNote.created);
+  refs.noteDateInput.value = formatDate(
+    new Date(Date.parse(elem.parentElement.parentElement.children[2].innerText))
+  );
   refs.noteDateInput.setAttribute('disabled', 'disabled');
   refs.noteCategorySelect.value =
     elem.parentElement.parentElement.children[3].innerText;
@@ -178,13 +216,31 @@ function prefillFormWithNoteData(elem) {
     elem.parentElement.parentElement.children[4].innerText;
 }
 
-function addToArchive(id) {
-  noteToArchivate = notes.find(note => note.id === id);
+function addToArchive(id, event) {
+  noteToArchivate = notesList.find(note => note.id === id);
   archivedNote.push(noteToArchivate);
-  console.log(archivedNote);
-  noteToArchivateIndex = notes.findIndex(note => note.id === id);
-  notes.splice(noteToArchivateIndex, 1);
-  renderNotesList(notes);
+  noteToArchivateIndex = notesList.findIndex(note => note.id === id);
+  notesList.splice(noteToArchivateIndex, 1);
+  renderNotesList(notesList);
+  renderSummaryNotesInfo(notesList, archivedNote, noteCategoriesIcons);
+  //   event.target.classList.add('is-hidden');
+  //   event.target.nextElementSibling.classList.remove('is-hidden');
+}
+
+function removeFromArchive(id, event) {
+  noteToUnarchivate = archivedNote.find(note => note.id === id);
+  notesList.push(noteToUnarchivate);
+  noteToUnarchivateIndex = archivedNote.findIndex(note => note.id === id);
+  archivedNote.splice(noteToUnarchivateIndex, 1);
+  renderNotesList(archivedNote);
+  renderSummaryNotesInfo(notesList, archivedNote, noteCategoriesIcons);
+  //   event.target.classList.add('is-hidden');
+  //   console.log(event.target.previousElementSibling);
+  //   event.target.previousElementSibling.classList.remove('is-hidden');
+  const archiveElList = document.querySelectorAll('.archive');
+  const unarchiveElList = document.querySelectorAll('.unarchive');
+  archiveElList.forEach(elem => elem.classList.add('is-hidden'));
+  unarchiveElList.forEach(elem => elem.classList.remove('is-hidden'));
 }
 
 function showModal() {
@@ -200,16 +256,18 @@ function closeModal() {
 }
 
 function onShowArchiveSelectChange(event) {
-  if (event.target.value === 'archived') {
-    renderNotesList(archivedNote);
-  }
   switch (event.target.value) {
     case 'archived':
       renderNotesList(archivedNote);
+      const archiveElList = document.querySelectorAll('.archive');
+      const unarchiveElList = document.querySelectorAll('.unarchive');
+      archiveElList.forEach(elem => elem.classList.add('is-hidden'));
+      unarchiveElList.forEach(elem => elem.classList.remove('is-hidden'));
+
       break;
 
     case 'active':
-      renderNotesList(notes);
+      renderNotesList(notesList);
       break;
 
     default:

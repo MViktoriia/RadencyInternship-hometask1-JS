@@ -41,17 +41,13 @@ table th {
   }
 }
 
-table th>span.archive {
-  cursor: pointer;
-}
-
 table td {
   background-color: #f5f5f5;
   padding: 8px;
   border-top: #fff solid 10px;
 }
 
-td>span.edit,td>span.archive,td>span.delete {
+td>span.edit,td>span.archive,td>span.unarchive,td>span.delete {
   cursor: pointer;
 }
 
