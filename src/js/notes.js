@@ -61,9 +61,9 @@ function Notepad(notes) {
     // note remove
     const deleteElList = document.querySelectorAll('td>span.delete');
     deleteElList.forEach(deleteEl => {
-      deleteEl.addEventListener('click', () =>
+      deleteEl.addEventListener('click', e =>
         deleteNote(
-          deleteEl.parentElement.parentElement.id,
+          e.target.parentElement.parentElement.id,
           notesList,
           archivedNote,
           categories
@@ -74,8 +74,8 @@ function Notepad(notes) {
     // note edit
     const editElList = document.querySelectorAll('.edit');
     editElList.forEach(editEl => {
-      editEl.addEventListener('click', () =>
-        prefillFormWithNoteData(editEl, changedNote)
+      editEl.addEventListener('click', e =>
+        prefillFormWithNoteData(e.target, changedNote)
       );
     });
 
@@ -83,9 +83,9 @@ function Notepad(notes) {
     const archiveElList = document.querySelectorAll('.archive');
     const unarchiveElList = document.querySelectorAll('.unarchive');
     archiveElList.forEach(archiveEl => {
-      archiveEl.addEventListener('click', () =>
+      archiveEl.addEventListener('click', e =>
         addToArchive(
-          archiveEl.parentElement.parentElement.id,
+          e.target.parentElement.parentElement.id,
           notes,
           archivedNote,
           categories
@@ -94,9 +94,9 @@ function Notepad(notes) {
     });
 
     unarchiveElList.forEach(unarchiveEl => {
-      unarchiveEl.addEventListener('click', () =>
+      unarchiveEl.addEventListener('click', e =>
         removeFromArchive(
-          unarchiveEl.parentElement.parentElement.id,
+          e.target.parentElement.parentElement.id,
           notes,
           archivedNote,
           categories
@@ -183,9 +183,18 @@ function Notepad(notes) {
 
   function addNote(event, notes, archivedNote, categories) {
     event.preventDefault();
+
     const formData = new FormData(refs.formEl);
     if (refs.noteNameInput.value === '') {
       alert('Please enter note name');
+      return;
+    }
+    if (refs.noteContentInput.value === '') {
+      alert('Please enter some note content');
+      return;
+    }
+    if (refs.noteDateInput.value === '') {
+      alert('Please enter note date');
       return;
     }
     const newNote = {
