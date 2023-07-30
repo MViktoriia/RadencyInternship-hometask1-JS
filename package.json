@@ -5,7 +5,7 @@
   "homepage": "https://MViktoriia.github.io/radency-internship-hometask1-js",
   "scripts": {
     "start": "parcel src/*.html",
-    "build": "parcel build src/*.html --public-url /parcel-project-template/"
+    "build": "parcel build src/*.html --public-url /radency-internship-hometask1-js/"
   },
   "repository": {
     "type": "git",
