@@ -168,9 +168,18 @@ function NoteApp(initialNotes) {
   }
 
   function deleteNote(id, notes, archive, categories) {
-    const noteToDeliteIndex = notes.findIndex(note => note.id === id);
-    notes.splice(noteToDeliteIndex, 1);
-    renderNotesList(notes, categories);
+    const isActiveNote = !!notes.find(note => note.id === id);
+
+    if (isActiveNote) {
+      const noteToDeliteIndex = notes.findIndex(note => note.id === id);
+      notes.splice(noteToDeliteIndex, 1);
+      renderNotesList(notes, categories);
+      renderSummaryNotesInfo(notes, archive, categories);
+      return;
+    }
+    const noteToDeliteIndex = archive.findIndex(note => note.id === id);
+    archive.splice(noteToDeliteIndex, 1);
+    renderNotesList(archive, categories);
     renderSummaryNotesInfo(notes, archive, categories);
   }
 
