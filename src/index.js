@@ -1,1 +1,1 @@
-import './js/notes';
+import './js/notesApp';
