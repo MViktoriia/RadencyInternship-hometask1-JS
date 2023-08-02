@@ -89,7 +89,7 @@ function NoteApp(initialNotes) {
         archivedNote,
         categoriesInfo
       );
-    } else if (e.target.classList.contains('archive')) {
+    } else if (e.target.classList.contains('unarchive')) {
       removeFromArchive(
         e.target.parentElement.parentElement.id,
         notesList,
@@ -159,12 +159,14 @@ function NoteApp(initialNotes) {
     notes.push(noteToUnarchivate);
     const noteToUnarchivateIndex = archive.findIndex(note => note.id === id);
     archive.splice(noteToUnarchivateIndex, 1);
-    renderNotesList(notes, categories);
+    renderNotesList(archive, categories);
     renderSummaryNotesInfo(notes, archive, categories);
     const archiveElList = document.querySelectorAll('.archive');
     const unarchiveElList = document.querySelectorAll('.unarchive');
     archiveElList.forEach(elem => elem.classList.add('is-hidden'));
     unarchiveElList.forEach(elem => elem.classList.remove('is-hidden'));
+    const editElList = document.querySelectorAll('.edit');
+    editElList.forEach(elem => elem.classList.add('is-hidden'));
   }
 
   function deleteNote(id, notes, archive, categories) {
@@ -181,6 +183,12 @@ function NoteApp(initialNotes) {
     archive.splice(noteToDeliteIndex, 1);
     renderNotesList(archive, categories);
     renderSummaryNotesInfo(notes, archive, categories);
+    const archiveElList = document.querySelectorAll('.archive');
+    const unarchiveElList = document.querySelectorAll('.unarchive');
+    archiveElList.forEach(elem => elem.classList.add('is-hidden'));
+    unarchiveElList.forEach(elem => elem.classList.remove('is-hidden'));
+    const editElList = document.querySelectorAll('.edit');
+    editElList.forEach(elem => elem.classList.add('is-hidden'));
   }
 
   function onShowArchiveSelectChange(event, notes, archive, categories) {
@@ -191,7 +199,8 @@ function NoteApp(initialNotes) {
         const unarchiveElList = document.querySelectorAll('.unarchive');
         archiveElList.forEach(elem => elem.classList.add('is-hidden'));
         unarchiveElList.forEach(elem => elem.classList.remove('is-hidden'));
-
+        const editElList = document.querySelectorAll('.edit');
+        editElList.forEach(elem => elem.classList.add('is-hidden'));
         break;
 
       case 'active':
@@ -207,8 +216,8 @@ function NoteApp(initialNotes) {
     refs.backdropNoteEl.classList.toggle('is-hidden');
     refs.formEl.reset();
     refs.noteDateInput.removeAttribute('disabled', 'false');
-    refs.submitFormBtn.classList.toggle('is-hidden');
-    refs.submitFormBtnEdit.classList.toggle('is-hidden');
+    refs.submitFormBtn.classList.remove('is-hidden');
+    refs.submitFormBtnEdit.classList.add('is-hidden');
   }
 
   function showModal() {
